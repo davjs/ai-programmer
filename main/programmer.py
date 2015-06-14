@@ -1,13 +1,10 @@
 from main.function import Function
-from main.programgenerator import ProgramGenerator
+from main.programgenerator2 import ProgramGenerator2
 
 __author__ = 'david'
 
-def makeFunction(functionName,*arg):
-    return Function(functionName,*arg)
-
 def write(function : Function):
-    generator = ProgramGenerator(*function.parameters, length=1)
+    generator = ProgramGenerator2(function.parameters, function.resulting_type)
     for number_of_lines in range(1,4):
         for code in generator.get_codes(number_of_lines):
             function.body_text = code  # OLD: render_program(statement)

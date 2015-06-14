@@ -1,4 +1,4 @@
-from main.programgenerator2 import PROGRAM_INTENTION
+from main.programgenerator2 import PROGRAM_INTENTION, Parameter
 
 __author__ = 'David'
 
@@ -24,11 +24,11 @@ class generatorTests(unittest.TestCase):
     #    self.failUnless("return 1" in generator.get_returns())
 
     def test_get_intention(self):
-        generator = programgenerator2.ProgramGenerator2([("list_to_sum", type([]))], type(0))
+        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", type([]))], type(0))
         self.failUnless(generator.intention == PROGRAM_INTENTION.reduce_list)
 
     def testStatementReturn1(self):
-        generator = programgenerator2.ProgramGenerator2([("list_to_sum", list)], int)
+        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", list)], int)
         programs = generator.get_codes(4)
 
         self.failUnless(any("y = y + i\n" in codes for codes in programs))
@@ -42,5 +42,5 @@ class generatorTests(unittest.TestCase):
                         "return y" in programs)
 
     def test_get_computed_expressions_using_both_variables_y_plus_i(self):
-        generator = programgenerator2.ProgramGenerator2([("list_to_sum", type(list))], type(int))
+        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", type(list))], type(int))
         self.failUnless("y + i" in generator.get_computed_expressions_using_both_variables("y", "i"))
