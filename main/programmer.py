@@ -10,16 +10,13 @@ def write(function : Function):
             function.body_text = code  # OLD: render_program(statement)
             works = True
             for req in function.requirements:
-                try:
-                    if function.execute(str(req[0])) != req[1]:
-                        works = False
-                        break
-                except:
+                #try:
+                if function.execute(req.parameters) != req.output:
                     works = False
                     break
+                #except SyntaxError:
+                #    works = False
+                #    break
             if works:
                 return
     assert False
-
-def render_program(tokens):
-    return ' '.join(tokens) + "\n"

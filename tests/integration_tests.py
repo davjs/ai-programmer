@@ -1,4 +1,4 @@
-from main.function import Function
+from main.function import Function, Requirement
 from main.programgenerator2 import Parameter
 
 __author__ = 'david'
@@ -13,7 +13,7 @@ class programmerTest(unittest.TestCase):
     def testSimpleReq(self):
         requirements = []
         function = Function("foo", [Parameter("x", int)], int)
-        function.addRequirement(5,5)
+        function.add_requirement(Requirement((5,), 5))
         programmer.write(function)
         self.failUnless(function.execute("5") == 5)
         print(function.body_text)
@@ -21,8 +21,8 @@ class programmerTest(unittest.TestCase):
     def testTwoReq(self):
         requirements = []
         function = Function("foo", [Parameter("x", int)], int)
-        function.addRequirement(5,5)
-        function.addRequirement(6,6)
+        function.add_requirement(Requirement((5,), 5))
+        function.add_requirement(Requirement((6,), 6))
         programmer.write(function)
         self.failUnless(function.execute("5") == 5)
         self.failUnless(function.execute("6") == 6)
@@ -31,9 +31,9 @@ class programmerTest(unittest.TestCase):
     def testDiffReqAndAsserts(self):
         requirements = []
         function = Function("foo", [Parameter("x", int)], int)
-        function.addRequirement(5,6)
-        function.addRequirement(6,7)
-        function.addRequirement(7,8)
+        function.add_requirement(5,6)
+        function.add_requirement(6,7)
+        function.add_requirement(7,8)
         programmer.write(function)
         self.failUnless(function.execute("4") == 5)
         self.failUnless(function.execute("5") == 6)

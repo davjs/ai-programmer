@@ -1,4 +1,4 @@
-from main.programgenerator2 import PROGRAM_INTENTION, Parameter
+from main.programgenerator2 import PROGRAM_INTENTION, Parameter, get_computed_boolean_expressions_using_all_variables
 
 __author__ = 'David'
 
@@ -23,9 +23,21 @@ class generatorTests(unittest.TestCase):
     #    generator = programgenerator2.ProgramGenerator("x", length=1)
     #    self.failUnless("return 1" in generator.get_returns())
 
-    def test_get_intention(self):
-        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", type([]))], type(0))
+    def test_get_intention_reduce_list(self):
+        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", list)], int)
         self.failUnless(generator.intention == PROGRAM_INTENTION.reduce_list)
+
+    def test_get_intention_combine_booleans(self):
+        generator = programgenerator2.ProgramGenerator2([Parameter("x", bool), Parameter("y", bool)], bool)
+        self.failUnless(generator.intention == PROGRAM_INTENTION.combine_booleans)
+
+    def testBooleanCombineNotxOrY(self):
+        expressions = get_computed_boolean_expressions_using_all_variables(["x", "y"])
+        self.failUnless("not x or y" in expressions)
+
+    def testBooleanCombineXEqY(self):
+        expressions = get_computed_boolean_expressions_using_all_variables(["x", "y"])
+        self.failUnless("x == y" in expressions)
 
     def testStatementReturn1(self):
         generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", list)], int)
@@ -42,5 +54,5 @@ class generatorTests(unittest.TestCase):
                         "return y" in programs)
 
     def test_get_computed_expressions_using_both_variables_y_plus_i(self):
-        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", type(list))], type(int))
+        generator = programgenerator2
         self.failUnless("y + i" in generator.get_computed_expressions_using_both_variables("y", "i"))

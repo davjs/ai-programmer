@@ -1,5 +1,12 @@
 __author__ = 'david'
 
+class Requirement:
+    parameters = ()
+    output = None
+
+    def __init__(self, parameters, output):
+        self.parameters = parameters
+        self.output = output
 
 class Function:
     name = ""
@@ -10,15 +17,16 @@ class Function:
     result = 0
     resulting_type = type(None)
 
-    def addRequirement(self, *requirement):
+    def add_requirement(self, requirement: Requirement):
         self.requirements.append(requirement)
 
-    def execute(self, *arg):
+    def execute(self, parameters: ()):
+        parameters = (str(param) for param in parameters)
         self.result = 0
         wrapper = \
             self.func_def_text + \
             "\t" + self.body_text + '\n' + \
-            "self.result = " + self.name + "(" + ''.join(arg) + ")"
+            "self.result = " + self.name + "(" + ','.join(parameters) + ")"
         exec(wrapper, locals())
         return self.result
 
@@ -29,5 +37,5 @@ class Function:
         self.parameters = parameters
         self.requirements = []
         # TODO: Write test for function prototype rendering
-        parameter_string = ''.join([param.variable_name for param in parameters])
+        parameter_string = ','.join([param.variable_name for param in parameters])
         self.func_def_text = "def " + name + "(" + parameter_string + "):\n"
