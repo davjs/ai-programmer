@@ -1,5 +1,6 @@
 __author__ = 'david'
 
+
 class SourceCode:
     source_lines = ()
 
@@ -17,13 +18,15 @@ class SourceCode:
 
         for index, line_of_code in enumerate(self.source_lines):
             if line_of_code.startswith("for"):
-                to_indent.append(index+1)
+                to_indent.append(index + 1)
 
         if len(to_indent) > 0:
             lst = list(self.source_lines)
             for index in to_indent:
                 lst[index] = "\t" + lst[index]
             self.source_lines = tuple(lst)
+
+
 '''
 class SourceCodes:
     programs = []

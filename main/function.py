@@ -1,5 +1,6 @@
 __author__ = 'david'
 
+
 class Requirement:
     parameters = ()
     output = None
@@ -7,6 +8,7 @@ class Requirement:
     def __init__(self, parameters, output):
         self.parameters = parameters
         self.output = output
+
 
 class Function:
     name = ""
@@ -20,13 +22,15 @@ class Function:
     def add_requirement(self, requirement: Requirement):
         self.requirements.append(requirement)
 
-    def execute(self, parameters: ()):
-        parameters = (str(param) for param in parameters)
+    def execute(self, parameters: []):
+        parameters = [str(param) for param in parameters]
+        parameters = "(" + ','.join(parameters) + ")"
+        print(parameters)
         self.result = 0
         wrapper = \
             self.func_def_text + \
-            "\t" + self.body_text + '\n' + \
-            "self.result = " + self.name + "(" + ','.join(parameters) + ")"
+            self.body_text + \
+            "self.result = " + self.name + parameters
         exec(wrapper, locals())
         return self.result
 

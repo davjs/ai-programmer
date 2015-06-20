@@ -1,10 +1,11 @@
 import itertools
+
 from main.sourcecode import SourceCode
 
 __author__ = 'david'
 
-class ProgramGenerator:
 
+class ProgramGenerator:
     parameters = ()
     numbers = ("0", "1", "2", "3", "5")
     arithmetic_operators = ("+", "-", "*")

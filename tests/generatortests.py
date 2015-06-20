@@ -6,7 +6,7 @@ import unittest
 from main import programgenerator
 
 
-class generatorTests(unittest.TestCase):
+class GeneratorTests(unittest.TestCase):
     # SIMPLE X EXPRESSIONS
 
     def testExpressionX(self):
@@ -79,7 +79,7 @@ class generatorTests(unittest.TestCase):
 
         self.failUnless(any("y = y + i" in codes for codes in generator.get_codes(3)))
 
-        #self.failUnless("y = 0\n" +
+        # self.failUnless("y = 0\n" +
         #                "for i in list_of_numbers:\n" +
         #                "\t y = y + i\n" +
         #                "return y" in generator.get_codes(4))
