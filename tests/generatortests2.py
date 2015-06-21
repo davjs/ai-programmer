@@ -1,4 +1,5 @@
 import main.expressions
+from main.function import Function
 from main.programgenerator2 import ProgramIntention, Parameter
 from main.expressions import get_computed_boolean_expressions_using_all_variables
 
@@ -26,11 +27,13 @@ class GeneratorTests(unittest.TestCase):
     #    self.failUnless("return 1" in generator.get_returns())
 
     def test_get_intention_reduce_list(self):
-        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", list)], int)
+        f = Function("foo", [Parameter("list_to_sum", list)], int)
+        generator = programgenerator2.ProgramGenerator2(f)
         self.failUnless(generator.intention == ProgramIntention.reduce_list)
 
     def test_get_intention_combine_booleans(self):
-        generator = programgenerator2.ProgramGenerator2([Parameter("x", bool), Parameter("y", bool)], bool)
+        f = Function("foo", [Parameter("x", bool), Parameter("y", bool)], bool)
+        generator = programgenerator2.ProgramGenerator2(f)
         self.failUnless(generator.intention == ProgramIntention.combine_booleans)
 
     def testBooleanCombineNotxOrY(self):
@@ -42,7 +45,8 @@ class GeneratorTests(unittest.TestCase):
         self.failUnless("x == y" in expressions)
 
     def testStatementReturn1(self):
-        generator = programgenerator2.ProgramGenerator2([Parameter("list_to_sum", list)], int)
+        f = Function("foo", [Parameter("list_to_sum", list)], int)
+        generator = programgenerator2.ProgramGenerator2(f)
         programs = list(generator.get_codes(4))
 
         self.failUnless(any("y = 0" in codes for codes in programs))
