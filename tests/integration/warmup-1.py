@@ -42,6 +42,14 @@ class WarmupTests(unittest.TestCase):
         self.failUnlessEqual(function.execute(["2", "2"]), 8)
         self.failUnlessEqual(function.execute(["3", "3"]), 12)
 
+    def testDiff21(self):
+        function = Function("diff21", [Parameter("a", int)], int)
+        function.add_requirement(Requirement((19,), 2))
+        function.add_requirement(Requirement((10,), 11))
+        function.add_requirement(Requirement((21,), 0))
+        function.add_requirement(Requirement((22,), 2))
+        programmer.write(function)
+
 
 def main():
     unittest.main()

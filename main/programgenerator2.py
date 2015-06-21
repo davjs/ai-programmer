@@ -1,5 +1,7 @@
+from main import math_solver
 from main.expressions import get_modified_int, get_computed_expressions_using_both_variables, \
     get_computed_boolean_expressions_using_all_variables, get_boolean_expression_from_ints, get_combined_integers
+from main.function import Function
 
 __author__ = 'David'
 from enum import Enum
@@ -30,9 +32,14 @@ def reduce_list_programs(list_name: str):
                "return y"]  # return something accumulated from the loop
 
 
-def modify_int_programs(int_var):
-    for expr in get_modified_int(int_var):
-        yield ["return " + expr]  # return some modification to the variable
+def modify_int_programs(int_var, requirements: list):
+    equation = math_solver.get_linear_equation(requirements, int_var)
+    if equation:
+        return equation
+    else:
+        return "return " + int_var
+        # for expr in get_modified_int(int_var):
+        #    yield ["return " + expr]  # return some modification to the variable
 
 
 def combine_booleans_programs(parameters: list):
@@ -50,32 +57,35 @@ def combine_integers_programs(parameters: list):
                            "\treturn " + expr2,
                            "return s"]
 
+
+def get_program_intention(function_definition: Function) -> ProgramIntention:
+    _type = function_definition.parameters[0].variable_type
+    if len(function_definition.parameters) == 1:
+        if _type is list:
+            if function_definition.resulting_type is int:
+                return ProgramIntention.reduce_list
+        if _type is int:
+            if function_definition.resulting_type is int:
+                # TODO: This feature might be a bit to specific and unnecessary
+                return ProgramIntention.modify_integer_by_constant
+    elif all(param.variable_type is bool for param in function_definition.parameters):
+        return ProgramIntention.combine_booleans
+    elif all(param.variable_type is int for param in function_definition.parameters):
+        return ProgramIntention.combine_integers
+    else:
+        raise Exception("Unknown intention based on parameters")
+
+
 class ProgramGenerator2:
     parameters = []
     resulting_type = type(None)
 
-    def __init__(self, parameters: list, resulting_type):
+    def __init__(self, function_definition: Function):
         self.data = []
-        self.parameters = parameters
-        self.resulting_type = resulting_type
-        self.intention = self.get_program_intention()
-
-    def get_program_intention(self) -> ProgramIntention:
-        _type = self.parameters[0].variable_type
-        if len(self.parameters) == 1:
-            if _type is list:
-                if self.resulting_type is int:
-                    return ProgramIntention.reduce_list
-            if _type is int:
-                if self.resulting_type is int:
-                    # TODO: This feature might be a bit to specific and unnecessary
-                    return ProgramIntention.modify_integer_by_constant
-        elif all(param.variable_type is bool for param in self.parameters):
-            return ProgramIntention.combine_booleans
-        elif all(param.variable_type is int for param in self.parameters):
-            return ProgramIntention.combine_integers
-        else:
-            raise Exception("Unknown intention based on parameters")
+        self.parameters = function_definition.parameters
+        self.resulting_type = function_definition.resulting_type
+        self.intention = get_program_intention(function_definition)
+        self.requirements = function_definition.requirements
 
     def get_codes(self, lines_of_code: int) -> list:  # list[str]
         # TODO: Change to some mapping from enum->func?
@@ -85,7 +95,7 @@ class ProgramGenerator2:
             return reduce_list_programs(variable_names[0])
 
         elif self.intention == ProgramIntention.modify_integer_by_constant:
-            return modify_int_programs(variable_names[0])
+            return modify_int_programs(variable_names[0], self.requirements)
 
         elif self.intention == ProgramIntention.combine_booleans:
             return combine_booleans_programs(variable_names)
