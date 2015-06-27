@@ -1,7 +1,7 @@
 __author__ = 'David'
 
 
-def get_linear_equation(requirements: list, int_var: str):
+def get_linear_equation(int_var: str, requirements: list):
     if len(requirements) > 1:
         prev_angle = None
         index_phases = []

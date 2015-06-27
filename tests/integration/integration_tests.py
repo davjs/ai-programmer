@@ -34,6 +34,21 @@ class ProgrammerTest(unittest.TestCase):
         self.failUnless(function.execute("5") == 6)
         print(function.body_text)
 
+    def testLessThanSeven(self):
+        function = Function("foo", [Parameter("x", int)], bool)
+        function.add_requirement(Requirement((5,), True))
+        function.add_requirement(Requirement((6,), True))
+        function.add_requirement(Requirement((7,), False))
+        function.add_requirement(Requirement((8,), False))
+
+        programmer.write(function)
+        self.failUnless(function.execute("5") == True)
+        self.failUnless(function.execute("6") == True)
+        self.failUnless(function.execute("7") == False)
+        self.failUnless(function.execute("8") == False)
+
+        print(function.body_text)
+
 
 def main():
     unittest.main()

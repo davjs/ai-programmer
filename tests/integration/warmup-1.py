@@ -25,6 +25,7 @@ class WarmupTests(unittest.TestCase):
         function.add_requirement(Requirement((True, False), False))
         function.add_requirement(Requirement((False, True), False))
         programmer.write(function)
+        print(function.body_text)
         self.failUnlessEqual(function.execute(["True", "True"]), True)
         self.failUnlessEqual(function.execute(["False", "False"]), True)
         self.failUnlessEqual(function.execute(["True", "False"]), False)
@@ -49,7 +50,22 @@ class WarmupTests(unittest.TestCase):
         function.add_requirement(Requirement((21,), 0))
         function.add_requirement(Requirement((22,), 2))
         programmer.write(function)
+        print(function.body_text)
+        self.failUnlessEqual(function.execute(["19"]), 2)
+        self.failUnlessEqual(function.execute(["10"]), 11)
+        self.failUnlessEqual(function.execute(["21"]), 0)
+        self.failUnlessEqual(function.execute(["22"]), 2)
 
+    def testParrotTrouble(self):
+        function = Function("diff21", [Parameter("talking", bool), Parameter("hour", int)], bool)
+        function.add_requirement(Requirement((True, 6), True))
+        function.add_requirement(Requirement((True, 7), False))
+        function.add_requirement(Requirement((False, 6), False))
+        programmer.write(function)
+        print(function.body_text)
+        self.failUnlessEqual(function.execute(["True", "6"]), True)
+        self.failUnlessEqual(function.execute(["True", "7"]), False)
+        self.failUnlessEqual(function.execute(["False", "6"]), False)
 
 def main():
     unittest.main()

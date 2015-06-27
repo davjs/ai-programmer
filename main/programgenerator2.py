@@ -1,7 +1,8 @@
-from main import math_solver
+from main.solvers import math_solver
 from main.expressions import get_modified_int, get_computed_expressions_using_both_variables, \
-    get_computed_boolean_expressions_using_all_variables, get_boolean_expression_from_ints, get_combined_integers
+    get_boolean_expression_from_ints, get_combined_integers
 from main.function import Function
+from main.solvers.boolean_solver import get_boolean_equation
 
 __author__ = 'David'
 from enum import Enum
@@ -13,6 +14,7 @@ class ProgramIntention(Enum):
     modify_integer_by_constant = 2
     combine_booleans = 3
     combine_integers = 4
+    bool_from_int = 5
 
 
 class Parameter:
@@ -33,18 +35,27 @@ def reduce_list_programs(list_name: str):
 
 
 def modify_int_programs(int_var, requirements: list):
-    equation = math_solver.get_linear_equation(requirements, int_var)
+    equation = math_solver.get_linear_equation(int_var, requirements)
     if equation:
         return equation
     else:
         return "return " + int_var
-        # for expr in get_modified_int(int_var):
-        #    yield ["return " + expr]  # return some modification to the variable
 
 
-def combine_booleans_programs(parameters: list):
-    for expr in get_computed_boolean_expressions_using_all_variables(parameters):
-        yield ["return " + expr]
+def combine_booleans_programs(parameters: list, requirements: list):
+    equation = get_boolean_equation(parameters, requirements)
+    if equation:
+        return equation
+    else:
+        raise NotImplementedError
+
+
+def boolean_from_int(parameters: list, requirements: list):
+    equation = get_boolean_equation(parameters, requirements)
+    if equation:
+        return equation
+    else:
+        raise NotImplementedError
 
 
 def combine_integers_programs(parameters: list):
@@ -66,8 +77,11 @@ def get_program_intention(function_definition: Function) -> ProgramIntention:
                 return ProgramIntention.reduce_list
         if _type is int:
             if function_definition.resulting_type is int:
-                # TODO: This feature might be a bit to specific and unnecessary
                 return ProgramIntention.modify_integer_by_constant
+            elif function_definition.resulting_type is bool:
+                return ProgramIntention.bool_from_int
+            else:
+                raise Exception("Unknown intention based on parameters")
     elif all(param.variable_type is bool for param in function_definition.parameters):
         return ProgramIntention.combine_booleans
     elif all(param.variable_type is int for param in function_definition.parameters):
@@ -98,10 +112,12 @@ class ProgramGenerator2:
             return modify_int_programs(variable_names[0], self.requirements)
 
         elif self.intention == ProgramIntention.combine_booleans:
-            return combine_booleans_programs(variable_names)
+            return combine_booleans_programs(variable_names, self.requirements)
 
         elif self.intention == ProgramIntention.combine_integers:
             return combine_integers_programs(variable_names)
+        elif self.intention == ProgramIntention.bool_from_int:
+            return boolean_from_int(variable_names, self.requirements)
 
         else:
-            raise Exception("Intention found but not yet implemented")
+            raise Exception("Intention: '" + str(self.intention) + "' - found but not yet implemented")

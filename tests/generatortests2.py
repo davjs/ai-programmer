@@ -22,10 +22,6 @@ class GeneratorTests(unittest.TestCase):
     """
     # SIMPLE RETURN STATEMENTS
 
-    # def testStatementReturn1(self):
-    #    generator = programgenerator2.ProgramGenerator("x", length=1)
-    #    self.failUnless("return 1" in generator.get_returns())
-
     def test_get_intention_reduce_list(self):
         f = Function("foo", [Parameter("list_to_sum", list)], int)
         generator = programgenerator2.ProgramGenerator2(f)

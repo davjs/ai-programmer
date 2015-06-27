@@ -1,5 +1,5 @@
 from main.function import Requirement
-from main.math_solver import get_linear_equation
+from main.solvers.math_solver import get_linear_equation
 
 __author__ = 'david'
 
