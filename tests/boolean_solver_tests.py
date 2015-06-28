@@ -25,6 +25,20 @@ class BooleanSolverTests(unittest.TestCase):
         self.failUnlessEqual("(x and not y) or (y and not x)", eq)
 
 
+# 1    2    3     4    5    6
+# False,True,False,True,False,True
+# return x % 2
+
+# True,True,True,False,False,False
+# return x < 4
+
+
+
+
+# True,True,False,False,False,True
+# return x >= 3 and x <= 4
+
+
 def main():
     unittest.main()
 

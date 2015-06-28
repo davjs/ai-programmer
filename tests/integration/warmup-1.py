@@ -67,6 +67,7 @@ class WarmupTests(unittest.TestCase):
         self.failUnlessEqual(function.execute(["True", "7"]), False)
         self.failUnlessEqual(function.execute(["False", "6"]), False)
 
+
 def main():
     unittest.main()
 
