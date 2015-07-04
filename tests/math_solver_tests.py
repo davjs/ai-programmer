@@ -1,5 +1,6 @@
 from main.function import Requirement
 from main.solvers.math_solver import get_linear_equation
+from main.solvers.unified_solver import solve_boolean_equation
 
 __author__ = 'david'
 
@@ -29,7 +30,7 @@ class MathSolverTests(unittest.TestCase):
                         ]
         eq = get_linear_equation("n", requirements)
         self.failUnlessEqual(
-            ["if n > 21:",
+            ["if n >= 21:",
              "\treturn n * 2 + -42",
              "else:",
              "\treturn n * -1 + 21"], eq)
@@ -41,21 +42,23 @@ class MathSolverTests(unittest.TestCase):
                         Requirement((4,), 0),
                         Requirement((5,), 0),
                         Requirement((6,), 0)]
-        eq = get_linear_equation("x", requirements)
-        self.failUnlessEqual("x < 4", eq)
+        eq = solve_boolean_equation("x", requirements)
+        self.failUnlessEqual("not x >= 4", eq)
 
     # False,False,False,True,True,True
     # return x >= 4
 
-    def testBoolFromIntLargerEqualThen(self):
-        requirements = [Requirement((1,), 0),
-                        Requirement((2,), 0),
-                        Requirement((3,), 0),
-                        Requirement((4,), 1),
-                        Requirement((5,), 1),
-                        Requirement((6,), 1)]
-        eq = get_linear_equation("x", requirements)
-        self.failUnlessEqual("x >= 4", eq)
+    def testNoInterpolate(self):
+        requirements = [Requirement((0,), 0),
+                        Requirement((5,), 10),
+                        Requirement((10,), 20),
+                        Requirement((15,), 15),
+                        Requirement((20,), 15)]
+        eq = get_linear_equation("x", requirements, interpolate=False)
+        self.failUnlessEqual(["if x >= 15:",
+                              "\treturn 15",
+                              "else:",
+                              "\treturn x * 2"], eq)
 
 
 def main():

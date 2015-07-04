@@ -11,7 +11,6 @@ def get_boolean_equation(boolean_var_names: list, requirements: list):
         print(formula)
         return "return " + render_formula(formula, True)
 
-
 def render_formula(formula, first=False):
     text = ''
 
