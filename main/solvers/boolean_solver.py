@@ -13,7 +13,7 @@ def solve_boolean_expression(boolean_var_names: list, requirements: list):
 
 
 def get_boolean_equation(boolean_var_names: list, requirements: list):
-    return "return " + get_boolean_equation(boolean_var_names, requirements)
+    return "return " + solve_boolean_expression(boolean_var_names, requirements)
 
 def render_formula(formula, first=False):
     text = ''

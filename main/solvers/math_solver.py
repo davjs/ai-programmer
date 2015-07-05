@@ -47,7 +47,7 @@ def get_linear_equation(int_var: str, requirements: list, interpolate=True):
             return_statements[index] = ("return " + str_multiply + str_offset)
 
         if len(index_phases) == 1:
-            return return_statements[index_phases[0]]
+            return [return_statements[index_phases[0]]]
         else:
             sourcecode = []
             for index in reversed(index_phases[1:]):

@@ -13,14 +13,14 @@ class MathSolverTests(unittest.TestCase):
                         Requirement((2,), 4),
                         Requirement((3,), 6)]
         eq = get_linear_equation("x", requirements)
-        self.failUnlessEqual("return x * 2", eq)
+        self.failUnlessEqual(["return x * 2"], eq)
 
     def testLinearEquationDiff21(self):
         requirements = [Requirement((19,), 2),
                         Requirement((10,), 11),
                         Requirement((21,), 0)]
         eq = get_linear_equation("n", requirements)
-        self.failUnlessEqual("return n * -1 + 21", eq)
+        self.failUnlessEqual(["return n * -1 + 21"], eq)
 
     def testLinearEquationDiff21OrDouble(self):
         requirements = [Requirement((19,), 2),

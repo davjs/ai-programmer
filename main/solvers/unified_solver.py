@@ -8,6 +8,10 @@ __author__ = 'david'
 def solve_boolean_equation(int_var: str, requirements: list):
     eq = get_linear_equation(int_var, requirements, interpolate=False)
     success_expressions = []
+
+    if len(eq) == 1:
+        return str.replace(eq[0], "return ", "") + " >= 1"
+
     if len(eq) % 2 == 0:
         for line_nr in range(0, len(eq) - 1, 2):
             if_statement = eq[line_nr]
@@ -22,6 +26,7 @@ def solve_boolean_equation(int_var: str, requirements: list):
     return eq
 
 
+## REQUIREMENTS ORDER CURRENCTLY NEED TO BE IN INT, BOOL,BOOL ...
 def solver_mixed_equation(int_var: str, bool_vars: list, requirements:list):
     bool_reqs = [Requirement(req.parameters[1:], req.output) for req in requirements]
 
