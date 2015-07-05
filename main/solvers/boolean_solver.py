@@ -3,16 +3,23 @@ from sympy import *
 __author__ = 'David'
 
 
-def get_boolean_equation(boolean_var_names: list, requirements: list):
+def solve_boolean_expression(boolean_var_names: list, requirements: list):
     if len(requirements) > 1:
         true_parameters = [list(r.parameters) for r in requirements if r.output]
-        false_parameters = []  # [list(r.parameters) for r in requirements if r.output == False]
-        formula = SOPform(boolean_var_names, true_parameters, false_parameters)
+        parameters_that_doesnt_matter = []
+        formula = SOPform(boolean_var_names, true_parameters, parameters_that_doesnt_matter)
         print(formula)
-        return "return " + render_formula(formula, True)
+        return render_formula(formula, True)
+
+
+def get_boolean_equation(boolean_var_names: list, requirements: list):
+    return "return " + get_boolean_equation(boolean_var_names, requirements)
 
 def render_formula(formula, first=False):
     text = ''
+
+    if isinstance(formula, Symbol):
+        return str(formula)
 
     if formula.func == Not:
         text += 'not ' + render_symbol(formula.args[0])
@@ -26,6 +33,8 @@ def render_formula(formula, first=False):
             text += ' or '.join(rendered_symbols)
         elif formula.func == And:
             text += ' and '.join(rendered_symbols)
+        elif formula.func == Symbol:
+            text += str(formula.args)
         else:
             raise NotImplementedError(formula.func)
 
