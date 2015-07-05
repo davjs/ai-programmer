@@ -37,6 +37,17 @@ class MathSolverTests(unittest.TestCase):
         eq = solve_boolean_equation("x", requirements)
         self.failUnlessEqual("not x >= 6 and x >= 4", eq)
 
+    # The integer part of the parrot trouble program, ie (hour < 7 or hour > 20)
+    def test_parrot_int_part(self):
+        requirements = [Requirement((5,), 1),
+                        Requirement((6,), 1),
+                        Requirement((7,), 0),
+                        Requirement((8,), 0),
+                        Requirement((21,), 1),
+                        Requirement((23,), 1)]
+        eq = solve_boolean_equation("x", requirements)
+        self.failUnlessEqual("hour >= 21 and not hour >= 7", eq)  # TODO: Replace and by or?
+
     def testBoolFromIntAndBool(self):
         requirements = [Requirement((1, 1), 0),
                         Requirement((2, 1), 0),
@@ -53,8 +64,9 @@ class MathSolverTests(unittest.TestCase):
     def testParrotTrouble(self):
         requirements = [Requirement((5, True), True),
                         Requirement((6, True), True),
-                        Requirement((7, True), False),
                         Requirement((6, False), False),
+                        Requirement((7, True), False),
+                        Requirement((8, True), False),
                         Requirement((21, True), True),
                         Requirement((23, True), True)]
         eq = solver_mixed_equation("hour", ["talking", ], requirements)
